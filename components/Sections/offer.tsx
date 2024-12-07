@@ -20,7 +20,7 @@ const TheOffer: React.FC = () => {
             Chez Made by French, nous sommes spécialisés dans la création de
             tapis sur mesure, adaptés à vos besoins exacts. Que vous cherchiez
             une taille, une couleur spécifique ou un design personnalisé, nous
-            avons ce qu'il vous faut. Grâce à une variété d'options de
+            avons ce qu&apos;il vous faut. Grâce à une variété d&apos;options de
             personnalisation, incluant du texte et des logos modifiables, vous
             pouvez concevoir le tapis parfait pour votre espace.
           </p>

@@ -2,12 +2,6 @@
 import { FC } from "react";
 import Image from "next/image";
 
-interface ClientImage {
-  id: number;
-  src: string;
-  alt: string;
-}
-
 const clientImages = [
   {
     id: 1,

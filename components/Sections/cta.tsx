@@ -11,7 +11,7 @@ const CallToActionBanner: FC = () => {
         Prêt à créer le tapis de vos rêves?
         </h2>
         <p className="text-lg sm:text-xl font-serif">
-        Sélectionnez votre taille, couleur, logo et texte pour concevoir un tapis personnalisé qui correspond à votre style. C'est rapide, facile et amusant !
+        Sélectionnez votre taille, couleur, logo et texte pour concevoir un tapis personnalisé qui correspond à votre style. C&apos;est rapide, facile et amusant !
         </p>
         {/* CTA Button */}
         <Link

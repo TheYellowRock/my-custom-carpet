@@ -14,7 +14,7 @@ const WhatHero: FC = () => {
           </h1>
           <p className="my-4 text-xl text-gray-600 font-serif animate-slideIn">
             At Custom Carpets, we specialize in creating carpets tailored to your exact needs.
-            Whether you're looking for a custom size, color, or a personalized design, we have you
+            Whether you&apos;re looking for a custom size, color, or a personalized design, we have you
             covered. With a variety of customization options, including editable text and logos, you
             can design the perfect carpet for your space.
           </p>
