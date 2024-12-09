@@ -36,7 +36,7 @@ const HappyClientsGallery: FC = () => {
 
   return (
     <section className="max-w-screen-xl mx-auto py-20 px-6">
-      <h2 className="text-4xl sm:text-5xl font-sans font-bold text-gray-900 text-center mb-12 animate-fadeIn">
+      <h2 className="text-4xl sm:text-5xl font-sans  text-gray-900 text-center mb-12 animate-fadeIn">
       Nos clients satisfaits
       </h2>
       <div className="overflow-hidden">

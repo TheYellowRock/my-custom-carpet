@@ -14,10 +14,9 @@ const CarpetCustomizerPage = () => {
   const [fontFamily, setFontFamily] = useState("Arial, sans-serif"); // Add default fontFamily
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gray-100 p-4 md:p-8 relative gap-6">
-  
+    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 items-center bg-gray-100 p-4 py-10 md:p-8 md:py-14 gap-6">
       {/* Centered Carpet Preview */}
-      <div className="flex-grow flex justify-center items-center mb-6 md:mb-0 w-full md:w-1/2">
+      <div className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center items-center w-full">
         <CarpetPreviewContainer
           width={width}
           length={length}
@@ -29,9 +28,9 @@ const CarpetCustomizerPage = () => {
           fontFamily={fontFamily}
         />
       </div>
-  
+
       {/* Configurator Drawer */}
-      <div className=" w-full bg-white p-4 md:w-1/3 md:bg-transparent md:p-0 shadow-md md:shadow-none">
+      <div className="col-span-1 md:col-span-1 lg:col-span-1 w-full bg-white shadow-md md:shadow-none md:bg-transparent md:p-0">
         <ConfiguratorDrawer
           width={width}
           setWidth={setWidth}
@@ -45,14 +44,13 @@ const CarpetCustomizerPage = () => {
           setTextSize={setTextSize}
           textColor={textColor}
           setTextColor={setTextColor}
-          fontFamily={fontFamily} // Pass fontFamily state
-          setFontFamily={setFontFamily} // Setter function to update fontFamily
+          fontFamily={fontFamily}
+          setFontFamily={setFontFamily}
           setLogo={setLogo}
         />
       </div>
     </div>
   );
-  
 };
 
 export default CarpetCustomizerPage;

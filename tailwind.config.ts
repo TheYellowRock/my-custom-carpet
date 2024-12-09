@@ -15,6 +15,12 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        customRed:{
+          base: '#cb1528'
+        },
+        customBlue:{
+          base: '#012551'
+        },
         customTurcoise:{
           base: '#5ce1e6',
           hover: '#008ec5'

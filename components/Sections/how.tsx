@@ -13,11 +13,13 @@ const HowToHero: FC = () => {
     <section className="w-full bg-white">
       <div className="max-w-screen-xl mx-auto py-16 sm:py-32 px-6 text-center">
         {/* Centered Title */}
-        <h2 className="text-3xl sm:text-4xl md:text-5xl text-gray-900 mb-8 animate-fadeIn font-sans font-bold">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl text-gray-900 mb-8 animate-fadeIn font-sans">
           Comment faire?
         </h2>
-        <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-12 animate-fadeIn delay-100 font-serif">
-          Créez votre tapis personnalisé en sélectionnant et en modifiant les options ci-dessous. Choisissez la taille, la couleur, le logo et le texte souhaités pour le rendre unique.
+        <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-12 animate-fadeIn delay-100 font-sans">
+          Créez votre tapis personnalisé en sélectionnant et en modifiant les
+          options ci-dessous. Choisissez la taille, la couleur, le logo et le
+          texte souhaités pour le rendre unique.
         </p>
 
         <div className="max-w-screen-xl mx-auto py-10 px-6 text-center">
@@ -32,58 +34,59 @@ const HowToHero: FC = () => {
               />
             </div>
             <div className="flex flex-col gap-5 p-6 lg:p-10">
-              <div className="flex gap-5 p-5 border border-customTurcoise-base">
-                <div className="flex flex-col justify-center">
-                  <ArrowTrendingUpIcon className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600" />
-                  <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 font-sans">
-                    Taille
-                  </h3>
+              {/* Card */}
+              {[
+                {
+                  icon: 
+                    <ArrowTrendingUpIcon className="w-10 h-10 sm:w-12 sm:h-12 text-customRed-base" />
+                  ,
+                  title: "Taille",
+                  description:
+                    "Sélectionnez la taille de tapis qui convient le mieux à votre espace.",
+                },
+                {
+                  icon: (
+                    <SwatchIcon className="w-10 h-10 sm:w-12 sm:h-12 text-customRed-base" />
+                  ),
+                  title: "Couleur",
+                  description:
+                    "Choisissez parmi une variété de couleurs pour assortir à votre décor.",
+                },
+                {
+                  icon: (
+                    <PhotoIcon className="w-10 h-10 sm:w-12 sm:h-12 text-customRed-base" />
+                  ),
+                  title: "Logo",
+                  description:
+                    "Ajoutez votre propre logo pour une touche personnalisée.",
+                },
+                {
+                  icon: (
+                    <PencilIcon className="w-10 h-10 sm:w-12 sm:h-12 text-customRed-base" />
+                  ),
+                  title: "Texte",
+                  description:
+                    "Personnalisez le texte pour rendre votre tapis unique.",
+                },
+              ].map((card, index) => (
+                <div
+                  key={index}
+                  className="relative group flex items-center justify-center p-10 border border-customRed-base rounded-md overflow-hidden cursor-pointer"
+                >
+                  {/* Front: Logo and Title */}
+                  <div className="absolute inset-0 flex flex-row items-center justify-center gap-5 transition-transform duration-300 group-hover:translate-y-full">
+                    {card.icon}
+                    <h3 className="text-xl sm:text-2xl text-customBlue-base font-sans">
+                      {card.title}
+                    </h3>
+                  </div>
+
+                  {/* Back: Description */}
+                  <div className="absolute inset-0 flex items-center justify-center p-5 text-gray-600 font-sans bg-white transition-transform duration-300 transform translate-y-full group-hover:translate-y-0">
+                    <p>{card.description}</p>
+                  </div>
                 </div>
-                <div className="flex w-full h-full items-center justify-center">
-                  <p className="text-gray-600 font-serif">
-                    Sélectionnez la taille de tapis qui convient le mieux à votre espace.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-5 p-5 border border-customTurcoise-base">
-                <div className="flex flex-col justify-center">
-                  <SwatchIcon className="w-10 h-10 sm:w-12 sm:h-12 text-yellow-600" />
-                  <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 font-sans">
-                    Couleur
-                  </h3>
-                </div>
-                <div className="flex w-full h-full items-center justify-center">
-                  <p className="text-gray-600 font-serif">
-                    Choisissez parmi une variété de couleurs pour assortir à votre décor.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-5 p-5 border border-customTurcoise-base">
-                <div className="flex flex-col justify-center">
-                  <PhotoIcon className="w-10 h-10 sm:w-12 sm:h-12 text-green-600" />
-                  <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 font-sans">
-                    Logo
-                  </h3>
-                </div>
-                <div className="flex w-full h-full items-center justify-center">
-                  <p className="text-gray-600 font-serif">
-                    Ajoutez votre propre logo pour une touche personnalisée.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-5 p-5 border border-customTurcoise-base">
-                <div className="flex flex-col justify-center">
-                  <PencilIcon className="w-10 h-10 sm:w-12 sm:h-12 text-red-600" />
-                  <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 font-sans">
-                    Texte
-                  </h3>
-                </div>
-                <div className="flex w-full h-full items-center justify-center">
-                  <p className="text-gray-600 font-serif">
-                    Personnalisez le texte pour rendre votre tapis unique.
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

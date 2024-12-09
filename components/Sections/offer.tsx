@@ -12,11 +12,11 @@ const TheOffer: React.FC = () => {
       }} // Replace with your image path
     >
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="bg-customTurcoise-base bg-opacity-75 p-6 sm:p-10 shadow-lg max-w-lg md:max-w-2xl mx-4 sm:mx-auto">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-sans font-bold mb-4 text-center">
+        <div className="bg-customRed-base bg-opacity-75 p-6 sm:p-10 shadow-lg max-w-lg md:max-w-2xl mx-4 sm:mx-auto">
+          <h1 className="text-3xl text-white sm:text-4xl md:text-5xl font-sans mb-4 text-center">
             Que proposons-nous?
           </h1>
-          <p className="text-gray-700 text-lg sm:text-xl md:text-2xl font-serif py-4 sm:py-6 text-center">
+          <p className="text-gray-100 text-lg sm:text-xl md:text-2xl font-sans py-4 sm:py-6 text-center">
             Chez Made by French, nous sommes spécialisés dans la création de
             tapis sur mesure, adaptés à vos besoins exacts. Que vous cherchiez
             une taille, une couleur spécifique ou un design personnalisé, nous

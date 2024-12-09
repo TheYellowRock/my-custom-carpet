@@ -7,12 +7,12 @@ const Hero: React.FC = () => {
   const heroImages = [
     {
       id: 1,
-      src: "https://cdn.shopify.com/s/files/1/0768/3463/6043/files/YOUR_LOGO_6.png?v=1731840573",
+      src: "https://cdn.shopify.com/s/files/1/0768/3463/6043/files/YOUR_LOGO_9.png?v=1733707814",
       alt: "My Carpet Customizer",
     },
     {
       id: 2,
-      src: "https://cdn.shopify.com/s/files/1/0768/3463/6043/files/YOUR_LOGO_7.png?v=1731840675",
+      src: "https://cdn.shopify.com/s/files/1/0768/3463/6043/files/YOUR_LOGO_10.png?v=1733707962",
       alt: "My Carpet Customizer",
     },
   ];
@@ -45,15 +45,15 @@ const Hero: React.FC = () => {
         </div>
         {/* Text Section */}
         <div className="flex flex-col h-full items-center justify-center gap-6 md:gap-8 p-4 md:p-10">
-          <h1 className="text-3xl md:text-5xl font-sans font-bold">
+          <h1 className="text-3xl md:text-5xl font-sans">
             Créez le tapis parfait pour votre espace, entièrement personnalisable selon vos envies!
           </h1>
-          <p className="mt-4 text-xl md:text-2xl font-serif">
+          <p className="mt-4 text-xl md:text-2xl font-sans">
             Votre tapis, à votre façon ! Personnalisez les dimensions, les couleurs, le texte et le logo!
           </p>
           <Link
             href="/customize"
-            className="inline-block mt-8 px-6 py-3 md:px-8 md:py-4 bg-white text-customTurcoise-hover font-bold shadow-md hover:bg-customYellow-base focus:outline-none focus:ring-2 focus:customTurcoise-hover focus:ring-opacity-50 transition duration-300 animate-bounce font-sans"
+            className="inline-block mt-8 px-6 py-3 md:px-8 md:py-4 bg-white text-customRed-base shadow-md hover:text-customBlue-base focus:outline-none focus:ring-2 focus:customTurcoise-hover focus:ring-opacity-50 transition duration-300 animate-bounce font-sans"
           >
             Personnalisez votre tapis
           </Link>
