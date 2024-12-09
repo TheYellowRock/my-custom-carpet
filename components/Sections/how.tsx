@@ -71,7 +71,7 @@ const HowToHero: FC = () => {
               ].map((card, index) => (
                 <div
                   key={index}
-                  className="relative group flex items-center justify-center p-10 border border-customRed-base rounded-md overflow-hidden cursor-pointer"
+                  className="relative group flex items-center justify-center p-14 border border-customRed-base rounded-md overflow-hidden cursor-pointer"
                 >
                   {/* Front: Logo and Title */}
                   <div className="absolute inset-0 flex flex-row items-center justify-center gap-5 transition-transform duration-300 group-hover:translate-y-full">

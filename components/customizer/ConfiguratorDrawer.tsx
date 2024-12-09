@@ -65,14 +65,14 @@ const ConfiguratorDrawer: React.FC<ConfiguratorDrawerProps> = ({
 
   return (
     <div className="w-full md:w-80  bg-white shadow-lg p-6 overflow-y-auto">
-      <h2 className="text-2xl font-semibold mb-4 text-center md:text-left">
-        Customize Your Carpet
+      <h2 className=" text-2xl font-sans mb-4 text-center">
+      Personnalisez Votre Tapis
       </h2>
 
       {/* Size Section */}
       <Accordion>
-        <AccordionSection title="Size">
-          <label className="block text-sm font-medium mb-1">Width (cm)</label>
+        <AccordionSection title="Taille">
+          <label className="block text-sm font-medium font-sans mb-1">Largeur (cm)</label>
           <div className="mb-4">
             <div style={{ width: "100%" }}>
               <InputNumber
@@ -84,7 +84,7 @@ const ConfiguratorDrawer: React.FC<ConfiguratorDrawerProps> = ({
             </div>
           </div>
 
-          <label className="block text-sm font-medium mb-1">Length (cm)</label>
+          <label className="block text-sm font-medium font-sans mb-1">Longueur (cm)</label>
           <div className="mb-4">
             <div style={{ width: "100%" }}>
               <InputNumber
@@ -98,8 +98,8 @@ const ConfiguratorDrawer: React.FC<ConfiguratorDrawerProps> = ({
         </AccordionSection>
 
         {/* Color Section */}
-        <AccordionSection title="Color">
-          <label className="block text-sm font-medium mb-1">Carpet Color</label>
+        <AccordionSection title="Couleur">
+          <label className="block text-sm font-medium font-sans mb-1">Couleur du Tapis</label>
           <SketchPicker
             color={selectedColor}
             onChange={(color) => {
@@ -113,8 +113,8 @@ const ConfiguratorDrawer: React.FC<ConfiguratorDrawerProps> = ({
         </AccordionSection>
 
         {/* Text Styling Section */}
-        <AccordionSection title="Text Styling">
-          <label className="block text-sm font-medium mb-1">Text</label>
+        <AccordionSection title="Style du Texte">
+          <label className="block text-sm font-medium font-sans mb-1">Texte</label>
           <input
             type="text"
             value={text}
@@ -122,7 +122,7 @@ const ConfiguratorDrawer: React.FC<ConfiguratorDrawerProps> = ({
             className="w-full p-2 border rounded mb-4"
           />
 
-          <label className="block text-sm font-medium mb-1">Text Size</label>
+          <label className="block text-sm font-medium font-sans mb-1">Taille du Texte</label>
           <div className="mb-4">
             <div style={{ width: "100%" }}>
               <InputNumber
@@ -134,7 +134,7 @@ const ConfiguratorDrawer: React.FC<ConfiguratorDrawerProps> = ({
             </div>
           </div>
 
-          <label className="block text-sm font-medium mb-1">Font</label>
+          <label className="block text-sm font-medium font-sans mb-1">Police</label>
           <select
             value={fontFamily}
             onChange={(e) => setFontFamily(e.target.value)}
@@ -146,7 +146,7 @@ const ConfiguratorDrawer: React.FC<ConfiguratorDrawerProps> = ({
               </option>
             ))}
           </select>
-          <label className="block text-sm font-medium mb-1">Text Color</label>
+          <label className="block text-sm font-medium font-sans mb-1">Couleur du Texte</label>
           <SketchPicker
             color={selectedTextColor}
             onChange={(color) => {
@@ -159,7 +159,7 @@ const ConfiguratorDrawer: React.FC<ConfiguratorDrawerProps> = ({
 
         {/* Logo Section */}
         <AccordionSection title="Logo">
-          <label className="block text-sm font-medium mb-1">Upload Logo</label>
+          <label className="block text-sm font-medium mb-1 font-sans">Télécharger le Logo</label>
           <input
             type="file"
             accept="image/*"
@@ -172,13 +172,13 @@ const ConfiguratorDrawer: React.FC<ConfiguratorDrawerProps> = ({
       {/* Price Summary & Checkout */}
       <div className="mt-6 pt-4 border-t">
         <div className="text-lg font-semibold mb-2">
-          Total Price: ${calculatePrice()}
+          Total:  €{calculatePrice()}
         </div>
         <button
           onClick={() => {
             /* Handle checkout logic here */
           }}
-          className="mt-4 w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className="mt-4 w-full bg-customBlue-base text-white p-2  hover:bg-customRed-base"
         >
           Checkout
         </button>

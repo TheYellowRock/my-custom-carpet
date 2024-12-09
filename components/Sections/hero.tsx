@@ -18,7 +18,7 @@ const Hero: React.FC = () => {
   ];
   return (
     <div
-      className="h-screen flex flex-col items-center justify-center text-white text-center 
+      className="md:h-screen flex flex-col items-center justify-center text-white text-center 
                  bg-[url('https://cdn.shopify.com/s/files/1/0768/3463/6043/files/black-grained-rough-pattern.jpg?v=1731598031')] bg-repeat bg-custom p-4"
     >
       <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -52,7 +52,7 @@ const Hero: React.FC = () => {
             Votre tapis, à votre façon ! Personnalisez les dimensions, les couleurs, le texte et le logo!
           </p>
           <Link
-            href="/customize"
+            href="/customizer"
             className="inline-block mt-8 px-6 py-3 md:px-8 md:py-4 bg-white text-customRed-base shadow-md hover:text-customBlue-base focus:outline-none focus:ring-2 focus:customTurcoise-hover focus:ring-opacity-50 transition duration-300 animate-bounce font-sans"
           >
             Personnalisez votre tapis

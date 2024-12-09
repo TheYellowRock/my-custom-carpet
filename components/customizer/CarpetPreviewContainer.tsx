@@ -68,7 +68,7 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
     >
       {/* Background image for carpet texture */}
       <div
-        className="border-8 border-gray-800 box-border p-8 absolute w-full h-full"
+        className="border-8 border-black box-border p-8 absolute w-full h-full"
         style={{
           top: 0,
           left: 0,
