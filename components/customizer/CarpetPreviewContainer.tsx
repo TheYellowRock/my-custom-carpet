@@ -41,6 +41,12 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
+      const scale = screenWidth / (length * multiplier);
+
+      if (stageRef.current) {
+        stageRef.current.scale({ x: scale, y: scale });
+        stageRef.current.batchDraw();
+      }
 
       if (screenWidth < 480) {
         setMultiplier(1.5);
@@ -58,7 +64,7 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [length, multiplier]);
 
   useEffect(() => {
     const newElements: CanvasElement[] = [];
@@ -97,6 +103,25 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
   useEffect(() => {
     updateTransformer();
   }, [selectedId]);
+
+  const handleDeleteButtonPosition = () => {
+    if (selectedId) {
+      const selectedElement = elements.find((el) => el.id === selectedId);
+      if (selectedElement) {
+        const stage = stageRef.current;
+        if (stage) {
+          const scale = stage.scaleX();
+          return {
+            top: selectedElement.y * scale,
+            left: selectedElement.x * scale,
+          };
+        }
+      }
+    }
+    return { top: 0, left: 0 };
+  };
+
+  const deleteButtonStyle = handleDeleteButtonPosition();
 
   const handleDelete = () => {
     setElements((prevElements) => prevElements.filter((el) => el.id !== selectedId));
@@ -140,6 +165,7 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
                 fontFamily={fontFamily}
                 draggable
                 onClick={() => setSelectedId(element.id)}
+                onTouchStart={() => setSelectedId(element.id)}
                 onDragEnd={(e) => {
                   setElements((prev) => prev.map((el) => el.id === element.id ? { ...el, x: e.target.x(), y: e.target.y() } : el));
                 }}
@@ -156,6 +182,7 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
                   draggable
                   image={imageObj}
                   onClick={() => setSelectedId(element.id)}
+                  onTouchStart={() => setSelectedId(element.id)}
                   onDragEnd={(e) => {
                     setElements((prev) => prev.map((el) => el.id === element.id ? { ...el, x: e.target.x(), y: e.target.y() } : el));
                   }}
@@ -163,7 +190,7 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
               )
             )
           )}
-          <Transformer ref={transformerRef} rotateEnabled={false} anchorSize={8} borderDash={[6, 2]} />
+          <Transformer ref={transformerRef} rotateEnabled={false} anchorSize={20} borderDash={[6, 2]} keepRatio={true} />
         </Layer>
       </Stage>
 
@@ -172,20 +199,14 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
           onClick={handleDelete}
           style={{
             position: 'absolute',
-            top: elements.find((el) => el.id === selectedId)?.y || 0,
-            left: (elements.find((el) => el.id === selectedId)?.x ?? 0),
-            padding: '5px 10px',
+            top: deleteButtonStyle.top,
+            left: deleteButtonStyle.left,
+            zIndex: 10,
             background: 'red',
             color: 'white',
-            border: 'none',
-            cursor: 'pointer',
             borderRadius: '50%',
             width: '30px',
             height: '30px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 10,
           }}
         >
           <FaTrash />
