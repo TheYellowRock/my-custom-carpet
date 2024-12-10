@@ -104,6 +104,12 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
     updateTransformer();
   }, [selectedId]);
 
+  const handleStageClick = (e: Konva.KonvaEventObject<Event>) => {
+    if (e.target === e.target.getStage()) {
+      setSelectedId(null);
+    }
+  };
+
   const handleDeleteButtonPosition = () => {
     if (selectedId) {
       const selectedElement = elements.find((el) => el.id === selectedId);
@@ -126,12 +132,6 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
   const handleDelete = () => {
     setElements((prevElements) => prevElements.filter((el) => el.id !== selectedId));
     setSelectedId(null);
-  };
-
-  const handleStageClick = (e: any) => {
-    if (e.target === e.target.getStage()) {
-      setSelectedId(null);
-    }
   };
 
   return (
@@ -196,7 +196,7 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
               )
             )
           )}
-          <Transformer ref={transformerRef} rotateEnabled={false} anchorSize={8} borderDash={[6, 2]} keepRatio={true} />
+          <Transformer ref={transformerRef} rotateEnabled={false} anchorSize={6} borderDash={[6, 2]} keepRatio={true} />
         </Layer>
       </Stage>
 
