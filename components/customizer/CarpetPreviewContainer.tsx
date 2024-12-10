@@ -6,12 +6,12 @@ import { FaTrash } from 'react-icons/fa'; // Import trash icon from react-icons
 interface CarpetPreviewContainerProps {
   width: number;
   length: number;
-  color: string; // Color prop to set the overlay color
+  color: string;
   text: string;
   textSize: number;
   textColor: string;
   fontFamily: string;
-  logo: string | null; // The logo URL (image) to be displayed on the carpet
+  logo: string | null;
 }
 
 interface CanvasElement {
@@ -24,7 +24,7 @@ interface CanvasElement {
 const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
   width,
   length,
-  color, // The color from the input
+  color,
   text,
   textSize,
   textColor,
@@ -33,72 +33,51 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
 }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [elements, setElements] = useState<CanvasElement[]>([]);
-  const [imageObj, setImageObj] = useState<HTMLImageElement | null>(null); // Image object to hold logo
+  const [imageObj, setImageObj] = useState<HTMLImageElement | null>(null);
   const stageRef = useRef<Konva.Stage>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
-
   const [multiplier, setMultiplier] = useState(5);
 
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
 
-      if (screenWidth < 480) { // Small mobile
+      if (screenWidth < 480) {
         setMultiplier(1.5);
-      } else if (screenWidth < 768) { // Mobile
+      } else if (screenWidth < 768) {
         setMultiplier(2);
-      } else if (screenWidth < 1024) { // Tablet
+      } else if (screenWidth < 1024) {
         setMultiplier(3);
-      } else if (screenWidth < 1440) { // Small desktop
+      } else if (screenWidth < 1440) {
         setMultiplier(4);
-      } else { // Large desktop
+      } else {
         setMultiplier(5);
       }
     };
 
-    // Initial check
     handleResize();
-
-    // Add resize event listener
     window.addEventListener('resize', handleResize);
-
-    // Cleanup event listener on component unmount
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
-    // Only add the text element if text is provided
     const newElements: CanvasElement[] = [];
-
     if (text) {
-      newElements.push({
-        id: 'text',
-        type: 'text',
-        x: 50,
-        y: 50,
-      });
+      newElements.push({ id: 'text', type: 'text', x: 50, y: 50 });
     }
-
     if (logo) {
-      newElements.push({
-        id: 'logo',
-        type: 'logo',
-        x: 100,
-        y: 100,
-      });
+      newElements.push({ id: 'logo', type: 'logo', x: 100, y: 100 });
     }
-
-    setElements(newElements); // Set elements dynamically based on the presence of text and logo
+    setElements(newElements);
   }, [text, logo]);
 
   useEffect(() => {
-    // If logo changes, create a new image object
     if (logo) {
       const img = new window.Image();
       img.src = logo;
-      img.onload = () => setImageObj(img); // Once loaded, set the image object state
+      img.onload = () => setImageObj(img);
     } else {
-      setImageObj(null); // Reset if no logo is provided
+      setImageObj(null);
     }
   }, [logo]);
 
@@ -125,14 +104,7 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
   };
 
   return (
-    <div
-      className="flex flex-col items-center justify-center"
-      style={{
-        width: '100%', // 100% of the parent container's width
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
+    <div className="flex flex-col items-center justify-center" style={{ width: '100%', position: 'relative', overflow: 'hidden' }}>
       <Stage
         width={length * multiplier}
         height={width * multiplier}
@@ -140,26 +112,21 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
           backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0768/3463/6043/files/concrete-textured-background.jpg?v=1730849145)',
           backgroundSize: 'cover',
           backgroundRepeat: 'repeat',
-          border: '8px solid black', // Black border to represent carpet side rubber
+          border: '8px solid black',
         }}
         ref={stageRef}
-        onMouseDown={(e) => {
-          if (e.target === e.target.getStage()) {
-            setSelectedId(null);
-          }
-        }}
+        onMouseDown={(e) => { if (e.target === e.target.getStage()) setSelectedId(null); }}
+        onTouchStart={(e) => { if (e.target === e.target.getStage()) setSelectedId(null); }}
       >
         <Layer>
-          {/* Background rectangle with the overlay color */}
           <Rect
             x={0}
             y={0}
             width={length * multiplier}
             height={width * multiplier}
-            fill={color || 'black'}  // Use color from the prop, black if not provided
-            opacity={0.8}  // Adjust opacity of the overlay color
+            fill={color || 'black'}
+            opacity={0.8}
           />
-          {/* Conditional Rendering of Text */}
           {elements.map((element) =>
             element.type === 'text' ? (
               <Text
@@ -174,15 +141,10 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
                 draggable
                 onClick={() => setSelectedId(element.id)}
                 onDragEnd={(e) => {
-                  setElements((prev) =>
-                    prev.map((el) =>
-                      el.id === element.id ? { ...el, x: e.target.x(), y: e.target.y() } : el
-                    )
-                  );
+                  setElements((prev) => prev.map((el) => el.id === element.id ? { ...el, x: e.target.x(), y: e.target.y() } : el));
                 }}
               />
             ) : (
-              // Render logo image if available
               imageObj && (
                 <KonvaImage
                   key={element.id}
@@ -192,50 +154,41 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
                   width={100 * multiplier}
                   height={100 * multiplier}
                   draggable
-                  image={imageObj}  // Use the loaded image object
+                  image={imageObj}
                   onClick={() => setSelectedId(element.id)}
                   onDragEnd={(e) => {
-                    setElements((prev) =>
-                      prev.map((el) =>
-                        el.id === element.id ? { ...el, x: e.target.x(), y: e.target.y() } : el
-                      )
-                    );
+                    setElements((prev) => prev.map((el) => el.id === element.id ? { ...el, x: e.target.x(), y: e.target.y() } : el));
                   }}
                 />
               )
             )
           )}
-          <Transformer
-            ref={transformerRef}
-            rotateEnabled={false}
-            anchorSize={8}
-            borderDash={[6, 2]}
-          />
+          <Transformer ref={transformerRef} rotateEnabled={false} anchorSize={8} borderDash={[6, 2]} />
         </Layer>
       </Stage>
 
-      {/* Delete Button - Positioned next to the element */}
       {selectedId && (
         <button
           onClick={handleDelete}
           style={{
             position: 'absolute',
             top: elements.find((el) => el.id === selectedId)?.y || 0,
-            left: (elements.find((el) => el.id === selectedId)?.x ?? 0), // Position it next to the image/text
+            left: (elements.find((el) => el.id === selectedId)?.x ?? 0),
             padding: '5px 10px',
             background: 'red',
             color: 'white',
             border: 'none',
             cursor: 'pointer',
-            borderRadius: '50%', // Make the button circular
+            borderRadius: '50%',
             width: '30px',
             height: '30px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            zIndex: 10,
           }}
         >
-          <FaTrash /> {/* Trash icon */}
+          <FaTrash />
         </button>
       )}
     </div>
