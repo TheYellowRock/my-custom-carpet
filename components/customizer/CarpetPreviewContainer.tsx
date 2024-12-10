@@ -1,30 +1,41 @@
-import { FC, useState, useEffect } from 'react';
-import { Rnd } from 'react-rnd';
+import { FC, useState, useEffect, useRef } from 'react';
+import { Stage, Layer, Rect, Text, Image as KonvaImage, Transformer } from 'react-konva';
+import Konva from 'konva';
+import { FaTrash } from 'react-icons/fa'; // Import trash icon from react-icons
 
 interface CarpetPreviewContainerProps {
   width: number;
   length: number;
-  color: string;
+  color: string; // Color prop to set the overlay color
   text: string;
   textSize: number;
   textColor: string;
   fontFamily: string;
-  logo: string | null;
+  logo: string | null; // The logo URL (image) to be displayed on the carpet
+}
+
+interface CanvasElement {
+  id: string;
+  type: 'text' | 'logo';
+  x: number;
+  y: number;
 }
 
 const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
   width,
   length,
-  color,
+  color, // The color from the input
   text,
   textSize,
   textColor,
   fontFamily,
   logo,
 }) => {
-  const [isTextSelected, setIsTextSelected] = useState(false);
-  const [isLogoSelected, setIsLogoSelected] = useState(false);
-  const [textDimensions, setTextDimensions] = useState({ width: 150, height: 50 });
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [elements, setElements] = useState<CanvasElement[]>([]);
+  const [imageObj, setImageObj] = useState<HTMLImageElement | null>(null); // Image object to hold logo
+  const stageRef = useRef<Konva.Stage>(null);
+  const transformerRef = useRef<Konva.Transformer>(null);
 
   const [multiplier, setMultiplier] = useState(5);
 
@@ -55,110 +66,177 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    // Only add the text element if text is provided
+    const newElements: CanvasElement[] = [];
+
+    if (text) {
+      newElements.push({
+        id: 'text',
+        type: 'text',
+        x: 50,
+        y: 50,
+      });
+    }
+
+    if (logo) {
+      newElements.push({
+        id: 'logo',
+        type: 'logo',
+        x: 100,
+        y: 100,
+      });
+    }
+
+    setElements(newElements); // Set elements dynamically based on the presence of text and logo
+  }, [text, logo]);
+
+  useEffect(() => {
+    // If logo changes, create a new image object
+    if (logo) {
+      const img = new window.Image();
+      img.src = logo;
+      img.onload = () => setImageObj(img); // Once loaded, set the image object state
+    } else {
+      setImageObj(null); // Reset if no logo is provided
+    }
+  }, [logo]);
+
+  const updateTransformer = () => {
+    const transformer = transformerRef.current;
+    if (transformer && selectedId) {
+      const selectedNode = stageRef.current?.findOne(`#${selectedId}`);
+      if (selectedNode) {
+        transformer.nodes([selectedNode]);
+        transformer.getLayer()?.batchDraw();
+      }
+    } else {
+      transformer?.nodes([]);
+    }
+  };
+
+  useEffect(() => {
+    updateTransformer();
+  }, [selectedId]);
+
+  const handleDelete = () => {
+    setElements((prevElements) => prevElements.filter((el) => el.id !== selectedId));
+    setSelectedId(null);
+  };
+
   return (
     <div
       className="flex flex-col items-center justify-center"
       style={{
-        width: `${length*multiplier}px`,
-        height: `${width*multiplier}px`,
+        width: '100%', // 100% of the parent container's width
         position: 'relative',
-        border: '1px solid #ddd',
         overflow: 'hidden',
       }}
     >
-      {/* Background image for carpet texture */}
-      <div
-        className="border-8 border-black box-border p-8 absolute w-full h-full"
+      <Stage
+        width={length * multiplier}
+        height={width * multiplier}
         style={{
-          top: 0,
-          left: 0,
           backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0768/3463/6043/files/concrete-textured-background.jpg?v=1730849145)',
           backgroundSize: 'cover',
-          zIndex: 1,
+          backgroundRepeat: 'repeat',
+          border: '8px solid black', // Black border to represent carpet side rubber
         }}
-      />
-
-      {/* Color overlay with 90% opacity */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: color,
-          opacity: 0.9,
-          zIndex: 2,
-        }}
-      />
-
-      {/* Draggable and Resizable Text */}
-      <Rnd
-        bounds="parent"
-        enableResizing
-        size={{ width: textDimensions.width, height: textDimensions.height }}
-        onResizeStop={(e, direction, ref) => {
-          setTextDimensions({
-            width: ref.offsetWidth,
-            height: ref.offsetHeight,
-          });
-        }}
-        onDragStop={() => setIsTextSelected(false)}
-        onClick={() => setIsTextSelected(true)}
-        style={{
-          fontFamily,
-          color: textColor,
-          fontSize: `${textSize}px`,
-          fontWeight: 'bold',
-          border: isTextSelected ? '1px dashed #333' : 'none',
-          cursor: 'move',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 3,
+        ref={stageRef}
+        onMouseDown={(e) => {
+          if (e.target === e.target.getStage()) {
+            setSelectedId(null);
+          }
         }}
       >
-        <div
-          style={{
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          {text}
-        </div>
-      </Rnd>
-
-      {/* Draggable and Resizable Logo */}
-      {logo && (
-        <Rnd
-          bounds="parent"
-          enableResizing
-          default={{
-            width: 100,
-            height: 100,
-            x: width / 4,
-            y: length / 4,
-          }}
-          onResizeStop={() => setIsLogoSelected(true)}
-          onDragStop={() => setIsLogoSelected(false)}
-          onClick={() => setIsLogoSelected(true)}
-          style={{
-            border: isLogoSelected ? '1px dashed #333' : 'none',
-            cursor: 'move',
-            zIndex: 3,
-          }}
-        >
-          <img
-            src={logo}
-            alt="Logo"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-            }}
+        <Layer>
+          {/* Background rectangle with the overlay color */}
+          <Rect
+            x={0}
+            y={0}
+            width={length * multiplier}
+            height={width * multiplier}
+            fill={color || 'black'}  // Use color from the prop, black if not provided
+            opacity={0.8}  // Adjust opacity of the overlay color
           />
-        </Rnd>
+          {/* Conditional Rendering of Text */}
+          {elements.map((element) =>
+            element.type === 'text' ? (
+              <Text
+                key={element.id}
+                id={element.id}
+                x={element.x}
+                y={element.y}
+                text={text}
+                fontSize={textSize}
+                fill={textColor}
+                fontFamily={fontFamily}
+                draggable
+                onClick={() => setSelectedId(element.id)}
+                onDragEnd={(e) => {
+                  setElements((prev) =>
+                    prev.map((el) =>
+                      el.id === element.id ? { ...el, x: e.target.x(), y: e.target.y() } : el
+                    )
+                  );
+                }}
+              />
+            ) : (
+              // Render logo image if available
+              imageObj && (
+                <KonvaImage
+                  key={element.id}
+                  id={element.id}
+                  x={element.x}
+                  y={element.y}
+                  width={100 * multiplier}
+                  height={100 * multiplier}
+                  draggable
+                  image={imageObj}  // Use the loaded image object
+                  onClick={() => setSelectedId(element.id)}
+                  onDragEnd={(e) => {
+                    setElements((prev) =>
+                      prev.map((el) =>
+                        el.id === element.id ? { ...el, x: e.target.x(), y: e.target.y() } : el
+                      )
+                    );
+                  }}
+                />
+              )
+            )
+          )}
+          <Transformer
+            ref={transformerRef}
+            rotateEnabled={false}
+            anchorSize={8}
+            borderDash={[6, 2]}
+          />
+        </Layer>
+      </Stage>
+
+      {/* Delete Button - Positioned next to the element */}
+      {selectedId && (
+        <button
+          onClick={handleDelete}
+          style={{
+            position: 'absolute',
+            top: elements.find((el) => el.id === selectedId)?.y || 0,
+            left: (elements.find((el) => el.id === selectedId)?.x ?? 0), // Position it next to the image/text
+            padding: '5px 10px',
+            background: 'red',
+            color: 'white',
+            border: 'none',
+            cursor: 'pointer',
+            borderRadius: '50%', // Make the button circular
+            width: '30px',
+            height: '30px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <FaTrash /> {/* Trash icon */}
+        </button>
       )}
     </div>
   );

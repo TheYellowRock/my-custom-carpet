@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Rnd } from 'react-rnd';
-import Image from 'next/image';
+import React, { useState, useRef, useEffect } from "react";
+import { Stage, Layer, Text, Image, Transformer, Rect } from "react-konva";
+import Konva from "konva";
 
 interface CarpetPreviewProps {
   width: number;
@@ -21,9 +21,42 @@ const CarpetPreview: React.FC<CarpetPreviewProps> = ({
   textColor,
   logo,
 }) => {
-  const [isTextSelected, setIsTextSelected] = useState(false);
-  const [isLogoSelected, setIsLogoSelected] = useState(false);
-  const [textDimensions, setTextDimensions] = useState({ width: 150, height: 50 });
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [logoImage, setLogoImage] = useState<HTMLImageElement | null>(null);
+
+  const stageRef = useRef<Konva.Stage>(null);
+  const transformerRef = useRef<Konva.Transformer>(null);
+
+  // Dynamically load the logo image
+  useEffect(() => {
+    if (logo) {
+      const img = new window.Image();
+      img.src = logo;
+      img.onload = () => {
+        setLogoImage(img);
+      };
+    } else {
+      setLogoImage(null);
+    }
+  }, [logo]);
+
+  // Update Transformer
+  const updateTransformer = () => {
+    const transformer = transformerRef.current;
+    if (transformer && selectedId) {
+      const selectedNode = stageRef.current?.findOne(`#${selectedId}`);
+      if (selectedNode) {
+        transformer.nodes([selectedNode]);
+        transformer.getLayer()?.batchDraw();
+      }
+    } else {
+      transformer?.nodes([]);
+    }
+  };
+
+  useEffect(() => {
+    updateTransformer();
+  }, [selectedId]);
 
   return (
     <div
@@ -31,80 +64,68 @@ const CarpetPreview: React.FC<CarpetPreviewProps> = ({
       style={{
         width: `${width}px`,
         height: `${length}px`,
-        backgroundColor: color,
-        position: 'relative',
-        border: '1px solid #ddd',
-        overflow: 'hidden',
+        border: "1px solid #ddd",
+        overflow: "hidden",
       }}
     >
-      {/* Draggable and Resizable Text */}
-      <Rnd
-        bounds="parent"
-        enableResizing
-        size={{ width: textDimensions.width, height: textDimensions.height }}
-        onResizeStop={(e, direction, ref) => {
-          setTextDimensions({
-            width: ref.offsetWidth,
-            height: ref.offsetHeight,
-          });
-        }}
-        onDragStop={() => setIsTextSelected(false)}
-        onClick={() => setIsTextSelected(true)}
+      <Stage
+        width={width}
+        height={length}
         style={{
-          color: textColor,
-          fontSize: `${textSize}px`,
-          fontWeight: 'bold',
-          border: isTextSelected ? '1px dashed #333' : 'none',
-          cursor: 'move',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 3,
+          backgroundColor: color,
+        }}
+        ref={stageRef}
+        onMouseDown={(e) => {
+          if (e.target === e.target.getStage()) {
+            setSelectedId(null);
+          }
         }}
       >
-        <div
-          style={{
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          {text}
-        </div>
-      </Rnd>
-
-      {/* Draggable and Resizable Logo */}
-      {logo && (
-        <Rnd
-          bounds="parent"
-          enableResizing
-          default={{
-            width: 100,
-            height: 100,
-            x: width / 4,
-            y: length / 4,
-          }}
-          onResizeStop={() => setIsLogoSelected(true)}
-          onDragStop={() => setIsLogoSelected(false)}
-          onClick={() => setIsLogoSelected(true)}
-          style={{
-            border: isLogoSelected ? '1px dashed #333' : 'none',
-            cursor: 'move',
-            zIndex: 3,
-          }}
-        >
-          <Image
-            src={logo}
-            alt="Logo"
-            layout="fill"
-            objectFit="contain"
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
+        <Layer>
+          {/* Background Rectangle */}
+          <Rect
+            x={0}
+            y={0}
+            width={width}
+            height={length}
+            fill={color}
           />
-        </Rnd>
-      )}
+
+          {/* Draggable Text */}
+          <Text
+            id="text"
+            x={50}
+            y={50}
+            text={text}
+            fontSize={textSize}
+            fill={textColor}
+            draggable
+            onClick={() => setSelectedId("text")}
+          />
+
+          {/* Draggable Logo */}
+          {logoImage && (
+            <Image
+              id="logo"
+              x={100}
+              y={100}
+              width={100}
+              height={100}
+              image={logoImage}
+              draggable
+              onClick={() => setSelectedId("logo")}
+            />
+          )}
+
+          {/* Transformer */}
+          <Transformer
+            ref={transformerRef}
+            rotateEnabled={false}
+            anchorSize={8}
+            borderDash={[6, 2]}
+          />
+        </Layer>
+      </Stage>
     </div>
   );
 };

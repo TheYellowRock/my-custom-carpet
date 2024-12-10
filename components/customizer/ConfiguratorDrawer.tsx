@@ -113,7 +113,7 @@ const ConfiguratorDrawer: React.FC<ConfiguratorDrawerProps> = ({
         </AccordionSection>
 
         {/* Text Styling Section */}
-        <AccordionSection title="Style du Texte">
+        <AccordionSection title="Texte">
           <label className="block text-sm font-medium font-sans mb-1">Texte</label>
           <input
             type="text"
