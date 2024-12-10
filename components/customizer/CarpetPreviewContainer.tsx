@@ -128,6 +128,12 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
     setSelectedId(null);
   };
 
+  const handleStageClick = (e: any) => {
+    if (e.target === e.target.getStage()) {
+      setSelectedId(null);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center" style={{ width: '100%', position: 'relative', overflow: 'hidden' }}>
       <Stage
@@ -140,8 +146,8 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
           border: '8px solid black',
         }}
         ref={stageRef}
-        onMouseDown={(e) => { if (e.target === e.target.getStage()) setSelectedId(null); }}
-        onTouchStart={(e) => { if (e.target === e.target.getStage()) setSelectedId(null); }}
+        onMouseDown={handleStageClick}
+        onTouchStart={handleStageClick}
       >
         <Layer>
           <Rect
@@ -190,7 +196,7 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
               )
             )
           )}
-          <Transformer ref={transformerRef} rotateEnabled={false} anchorSize={20} borderDash={[6, 2]} keepRatio={true} />
+          <Transformer ref={transformerRef} rotateEnabled={false} anchorSize={8} borderDash={[6, 2]} keepRatio={true} />
         </Layer>
       </Stage>
 
@@ -205,11 +211,14 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
             background: 'red',
             color: 'white',
             borderRadius: '50%',
-            width: '30px',
-            height: '30px',
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
-          <FaTrash />
+          <FaTrash style={{ fontSize: '16px' }} />
         </button>
       )}
     </div>
