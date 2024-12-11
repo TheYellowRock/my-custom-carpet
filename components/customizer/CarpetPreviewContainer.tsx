@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, useRef } from 'react';
 import { Stage, Layer, Rect, Text, Image as KonvaImage, Transformer } from 'react-konva';
 import Konva from 'konva';
-import { FaTrash } from 'react-icons/fa'; // Import trash icon from react-icons
+import { FaTrash, FaCheck } from 'react-icons/fa'; // Import icons from react-icons
 
 interface CarpetPreviewContainerProps {
   width: number;
@@ -104,12 +104,6 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
     updateTransformer();
   }, [selectedId]);
 
-  const handleStageClick = (e: Konva.KonvaEventObject<Event>) => {
-    if (e.target === e.target.getStage()) {
-      setSelectedId(null);
-    }
-  };
-
   const handleDeleteButtonPosition = () => {
     if (selectedId) {
       const selectedElement = elements.find((el) => el.id === selectedId);
@@ -134,8 +128,14 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
     setSelectedId(null);
   };
 
+  const handleDeselect = () => {
+    setSelectedId(null);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center" style={{ width: '100%', position: 'relative', overflow: 'hidden' }}>
+    
+
       <Stage
         width={length * multiplier}
         height={width * multiplier}
@@ -146,8 +146,6 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
           border: '8px solid black',
         }}
         ref={stageRef}
-        onMouseDown={handleStageClick}
-        onTouchStart={handleStageClick}
       >
         <Layer>
           <Rect
@@ -196,30 +194,52 @@ const CarpetPreviewContainer: FC<CarpetPreviewContainerProps> = ({
               )
             )
           )}
-          <Transformer ref={transformerRef} rotateEnabled={false} anchorSize={6} borderDash={[6, 2]} keepRatio={true} />
+          <Transformer ref={transformerRef} rotateEnabled={false} anchorSize={8} borderDash={[6, 2]} keepRatio={true} />
         </Layer>
       </Stage>
 
       {selectedId && (
-        <button
-          onClick={handleDelete}
+        <div
           style={{
             position: 'absolute',
             top: deleteButtonStyle.top,
             left: deleteButtonStyle.left,
             zIndex: 10,
-            background: 'red',
-            color: 'white',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
             display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            gap: '10px',
           }}
         >
-          <FaTrash style={{ fontSize: '16px' }} />
-        </button>
+          <button
+            onClick={handleDelete}
+            style={{
+              background: 'red',
+              color: 'white',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <FaTrash style={{ fontSize: '16px' }} />
+          </button>
+          <button
+            onClick={handleDeselect}
+            style={{
+              background: 'green',
+              color: 'white',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <FaCheck style={{ fontSize: '16px' }} />
+          </button>
+        </div>
       )}
     </div>
   );
